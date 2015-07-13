@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <script type="text/javascript" src="http://www.liu-api-notifications-qa.appspot.com/_ah/channel/jsapi"></script>
+    </head>
+    <body>
+        <input type="hidden" id="token" />
+        <script type="text/javascript">
+
+            var onOpened = function(){
+
+            };
+
+            var onMessage = function(m){
+                console.log(m);
+            };
+
+            var handler = {
+                'onopen': onOpened,
+                'onmessage': onMessage,
+                'onerror': function() {},
+                'onclose': function() {}
+            }
+
+            openChannel = function() {
+                var url = 'https://1-dot-api-dot-liu-api-notifications-qa.appspot.com/_ah/api/ferris/v1/collections/create_channel';
+                var channel;
+                var socket;
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', url);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+               
+                xhr.onload = function(){
+                    if(xhr.readyState == 4 && xhr.status === 200){
+                        var channel_info = JSON.parse(xhr.responseText);   
+                        console.log(channel_info); 
+                        channel = new goog.appengine.Channel(channel_info.token);
+                        var socket = channel.open(handler);
+                        console.log(socket); 
+                    }
+                };
+                xhr.send(JSON.stringify({'email':'g2@g.com', 'application':'regisys'}));
+
+                
+
+            }
+
+            initialize = function() {
+                openChannel();
+            }
+
+            setTimeout(initialize, 100);
+        </script>
+      hola :)
+    </body>
+
+</html>
